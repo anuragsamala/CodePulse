@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: codepulse
+    env: node
+    plan: free
+    buildCommand: npm run install:all && npm run build --prefix client && npx prisma generate --prefix server
+    startCommand: cd server && npx prisma db push && node prisma/seed.js && node server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 5000
+      - key: JWT_SECRET
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: codepulse-db
+          property: connectionString
+
+databases:
+  - name: codepulse-db
+    plan: free
