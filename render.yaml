@@ -1,9 +1,9 @@
 services:
   - type: web
     name: codepulse
-    env: node
+    runtime: node
     plan: free
-    buildCommand: npm run install:all && npm run build --prefix client && npx prisma generate --prefix server
+    buildCommand: npm install && cd client && npm install && npm run build && cd ../server && npm install && npx prisma generate
     startCommand: cd server && npx prisma db push && node prisma/seed.js && node server.js
     envVars:
       - key: NODE_ENV
